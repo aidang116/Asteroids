@@ -1,212 +1,286 @@
-[2026-08-14 08:57:53] [INFO] ================================================================================
-[2026-08-14 08:57:53] [INFO] INITIALIZING PHYSICALLY RIGOROUS BULK INVERSION ENGINE
-[2026-08-14 08:57:53] [INFO] ================================================================================
-[2026-08-14 08:57:53] [INFO] PROCESSING BATCH FILE: validation_targets.csv (10 targets)
-[2026-08-14 08:57:53] [INFO] ------------------------------------------------------------
-[2026-08-14 08:57:53] [INFO] STARTING INVERSION: Target=Saratov_L4_Lab | Taxonomy=S | pV=0.2
-[2026-08-14 08:57:54] [INFO] OPTIMIZATION CONVERGED: Target=Saratov_L4_Lab | Best Loss=0.000096 | Scale=0.8734 | Space Weathering=0.0791
-[2026-08-14 08:57:54] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
-[2026-08-14 08:57:54] [INFO]   - Forsterite_Fo90_10um                :   6.73%
-[2026-08-14 08:57:54] [INFO]   - Forsterite_Fo90_45um                :   9.48%
-[2026-08-14 08:57:54] [INFO]   - Forsterite_Fo90_125um               :   3.30%
-[2026-08-14 08:57:54] [INFO]   - Enstatite_En85_10um                 :   4.14%
-[2026-08-14 08:57:54] [INFO]   - Enstatite_En85_125um                :   9.79%
-[2026-08-14 08:57:54] [INFO]   - Ferrosilite_Fs50_45um               :  19.05%
-[2026-08-14 08:57:54] [INFO]   - Augite_HighCa_45um                  :   9.54%
-[2026-08-14 08:57:54] [INFO]   - Diopside_CrRich_45um                :   3.85%
-[2026-08-14 08:57:54] [INFO]   - Plagioclase_An80_45um               :  17.47%
-[2026-08-14 08:57:54] [INFO]   - Iron_Nickel_Kamacite_Particulate    :   3.83%
-[2026-08-14 08:57:54] [INFO]   - Troilite_FeS_Particulate            :   5.13%
-[2026-08-14 08:57:54] [INFO]   - Impact_Glass_Basaltic               :   7.69%
-[2026-08-14 08:57:54] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
-[2026-08-14 08:57:54] [INFO]   - Crustal Grain Density : 3.515 +/- 0.555 g/cm3
-[2026-08-14 08:57:54] [INFO]   - Density Differential  : -0.015 +/- 0.564 g/cm3
-[2026-08-14 08:57:54] [INFO]   - Total Porosity        : 0.00%
-[2026-08-14 08:57:54] [INFO]   - Macroporosity         : 0.00% +/- 0.00%
-[2026-08-14 08:57:54] [INFO]   - Core Volume Fraction  : 0.35%
-[2026-08-14 08:57:54] [INFO]   - Core Mass Fraction    : 0.78% +/- 5.38%
-[2026-08-14 08:57:54] [INFO]   - Goodness-of-Fit       : Chi2_r=2.8150 | SSE=0.001689 | AIC=-159.59 | AICc=-75.59 | BIC=-145.65
-[2026-08-14 08:57:54] [INFO] ------------------------------------------------------------
-[2026-08-14 08:57:54] [INFO] STARTING INVERSION: Target=Richardton_H5_Lab | Taxonomy=S | pV=0.18
-[2026-08-14 08:57:55] [INFO] OPTIMIZATION CONVERGED: Target=Richardton_H5_Lab | Best Loss=0.000100 | Scale=0.8234 | Space Weathering=0.0726
-[2026-08-14 08:57:55] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
-[2026-08-14 08:57:55] [INFO]   - Forsterite_Fo90_10um                :   5.63%
-[2026-08-14 08:57:55] [INFO]   - Forsterite_Fo90_45um                :   9.41%
-[2026-08-14 08:57:55] [INFO]   - Forsterite_Fo90_125um               :   9.60%
-[2026-08-14 08:57:55] [INFO]   - Fayalite_Fo10_45um                  :   8.67%
-[2026-08-14 08:57:55] [INFO]   - Enstatite_En85_10um                 :   6.11%
-[2026-08-14 08:57:55] [INFO]   - Enstatite_En85_45um                 :   8.48%
-[2026-08-14 08:57:55] [INFO]   - Enstatite_En85_125um                :  10.68%
-[2026-08-14 08:57:55] [INFO]   - Ferrosilite_Fs50_45um               :  12.39%
-[2026-08-14 08:57:55] [INFO]   - Augite_HighCa_45um                  :   9.32%
-[2026-08-14 08:57:55] [INFO]   - Diopside_CrRich_45um                :   7.53%
-[2026-08-14 08:57:55] [INFO]   - Plagioclase_An80_45um               :   6.59%
-[2026-08-14 08:57:55] [INFO]   - Troilite_FeS_Particulate            :   1.53%
-[2026-08-14 08:57:55] [INFO]   - Impact_Glass_Basaltic               :   4.07%
-[2026-08-14 08:57:55] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
-[2026-08-14 08:57:55] [INFO]   - Crustal Grain Density : 3.401 +/- 0.465 g/cm3
-[2026-08-14 08:57:55] [INFO]   - Density Differential  : -0.359 +/- 0.472 g/cm3
-[2026-08-14 08:57:55] [INFO]   - Total Porosity        : 0.00%
-[2026-08-14 08:57:55] [INFO]   - Macroporosity         : 0.00% +/- 0.00%
-[2026-08-14 08:57:55] [INFO]   - Core Volume Fraction  : 8.03%
-[2026-08-14 08:57:55] [INFO]   - Core Mass Fraction    : 16.80% +/- 8.56%
-[2026-08-14 08:57:55] [INFO]   - Goodness-of-Fit       : Chi2_r=3.6627 | SSE=0.001831 | AIC=-155.97 | AICc=-35.97 | BIC=-141.03
-[2026-08-14 08:57:55] [INFO] ------------------------------------------------------------
-[2026-08-14 08:57:55] [INFO] STARTING INVERSION: Target=Eros_Blue_Bias_Synth | Taxonomy=S | pV=0.29
-[2026-08-14 08:57:56] [INFO] OPTIMIZATION CONVERGED: Target=Eros_Blue_Bias_Synth | Best Loss=0.001376 | Scale=1.5000 | Space Weathering=0.0000
-[2026-08-14 08:57:56] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
-[2026-08-14 08:57:56] [INFO]   - Ferrosilite_Fs50_45um               :  24.38%
-[2026-08-14 08:57:56] [INFO]   - Diopside_CrRich_45um                :  20.37%
-[2026-08-14 08:57:56] [INFO]   - Plagioclase_An80_45um               :   8.03%
-[2026-08-14 08:57:56] [INFO]   - Impact_Glass_Basaltic               :  47.22%
-[2026-08-14 08:57:56] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
-[2026-08-14 08:57:56] [INFO]   - Crustal Grain Density : 3.149 +/- 0.249 g/cm3
-[2026-08-14 08:57:56] [INFO]   - Density Differential  : 0.479 +/- 0.272 g/cm3
-[2026-08-14 08:57:56] [INFO]   - Total Porosity        : 15.21%
-[2026-08-14 08:57:56] [INFO]   - Macroporosity         : 5.79% +/- 6.23%
-[2026-08-14 08:57:56] [INFO]   - Core Volume Fraction  : 0.00%
-[2026-08-14 08:57:56] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
-[2026-08-14 08:57:56] [INFO]   - Goodness-of-Fit       : Chi2_r=19.0859 | SSE=0.026720 | AIC=-120.36 | AICc=-113.90 | BIC=-114.39
-[2026-08-14 08:57:56] [INFO] ------------------------------------------------------------
-[2026-08-14 08:57:56] [INFO] STARTING INVERSION: Target=4179_Toutatis_ChangE2 | Taxonomy=S | pV=0.28
-[2026-08-14 08:57:57] [INFO] OPTIMIZATION CONVERGED: Target=4179_Toutatis_ChangE2 | Best Loss=0.000150 | Scale=0.9492 | Space Weathering=0.0901
-[2026-08-14 08:57:57] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
-[2026-08-14 08:57:57] [INFO]   - Forsterite_Fo90_10um                :   8.67%
-[2026-08-14 08:57:57] [INFO]   - Forsterite_Fo90_45um                :   3.02%
-[2026-08-14 08:57:57] [INFO]   - Enstatite_En85_10um                 :  12.31%
-[2026-08-14 08:57:57] [INFO]   - Enstatite_En85_125um                :   3.95%
-[2026-08-14 08:57:57] [INFO]   - Ferrosilite_Fs50_45um               :   9.65%
-[2026-08-14 08:57:57] [INFO]   - Augite_HighCa_45um                  :   0.38%
-[2026-08-14 08:57:57] [INFO]   - Diopside_CrRich_45um                :   8.31%
-[2026-08-14 08:57:57] [INFO]   - Plagioclase_An80_45um               :  31.54%
-[2026-08-14 08:57:57] [INFO]   - Iron_Nickel_Kamacite_Particulate    :  20.81%
-[2026-08-14 08:57:57] [INFO]   - Impact_Glass_Basaltic               :   1.36%
-[2026-08-14 08:57:57] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
-[2026-08-14 08:57:57] [INFO]   - Crustal Grain Density : 4.100 +/- 0.842 g/cm3
-[2026-08-14 08:57:57] [INFO]   - Density Differential  : 2.000 +/- 0.865 g/cm3
-[2026-08-14 08:57:57] [INFO]   - Total Porosity        : 48.78%
-[2026-08-14 08:57:57] [INFO]   - Macroporosity         : 43.08% +/- 11.07%
-[2026-08-14 08:57:57] [INFO]   - Core Volume Fraction  : 0.00%
-[2026-08-14 08:57:57] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
-[2026-08-14 08:57:57] [INFO]   - Goodness-of-Fit       : Chi2_r=3.2782 | SSE=0.002623 | AIC=-154.79 | AICc=-110.22 | BIC=-142.84
-[2026-08-14 08:57:57] [INFO] ------------------------------------------------------------
-[2026-08-14 08:57:57] [INFO] STARTING INVERSION: Target=21_Lutetia_Rosetta | Taxonomy=M | pV=0.19
-[2026-08-14 08:57:58] [INFO] OPTIMIZATION CONVERGED: Target=21_Lutetia_Rosetta | Best Loss=0.000073 | Scale=0.7890 | Space Weathering=0.0000
-[2026-08-14 08:57:58] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
-[2026-08-14 08:57:58] [INFO]   - Forsterite_Fo90_10um                :  17.36%
-[2026-08-14 08:57:58] [INFO]   - Enstatite_En85_10um                 :   6.60%
-[2026-08-14 08:57:58] [INFO]   - Plagioclase_An80_45um               :  23.96%
-[2026-08-14 08:57:58] [INFO]   - Iron_Nickel_Kamacite_Particulate    :   7.55%
-[2026-08-14 08:57:58] [INFO]   - Troilite_FeS_Particulate            :  12.65%
-[2026-08-14 08:57:58] [INFO]   - Impact_Glass_Basaltic               :  31.86%
-[2026-08-14 08:57:58] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
-[2026-08-14 08:57:58] [INFO]   - Crustal Grain Density : 3.507 +/- 0.393 g/cm3
-[2026-08-14 08:57:58] [INFO]   - Density Differential  : 0.107 +/- 0.495 g/cm3
-[2026-08-14 08:57:58] [INFO]   - Total Porosity        : 3.04%
-[2026-08-14 08:57:58] [INFO]   - Macroporosity         : 0.00% +/- 5.33%
-[2026-08-14 08:57:58] [INFO]   - Core Volume Fraction  : 0.00%
-[2026-08-14 08:57:58] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
-[2026-08-14 08:57:58] [INFO]   - Goodness-of-Fit       : Chi2_r=0.8642 | SSE=0.001037 | AIC=-181.34 | AICc=-168.25 | BIC=-173.38
-[2026-08-14 08:57:58] [INFO] ------------------------------------------------------------
-[2026-08-14 08:57:58] [INFO] STARTING INVERSION: Target=16_Psyche_Astronomical | Taxonomy=M | pV=0.12
-[2026-08-14 08:57:59] [INFO] OPTIMIZATION CONVERGED: Target=16_Psyche_Astronomical | Best Loss=0.000071 | Scale=0.9571 | Space Weathering=0.0000
-[2026-08-14 08:57:59] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
-[2026-08-14 08:57:59] [INFO]   - Forsterite_Fo90_10um                :   5.25%
-[2026-08-14 08:57:59] [INFO]   - Enstatite_En85_125um                :   4.79%
-[2026-08-14 08:57:59] [INFO]   - Ferrosilite_Fs50_45um               :   0.95%
-[2026-08-14 08:57:59] [INFO]   - Plagioclase_An80_45um               :   0.92%
-[2026-08-14 08:57:59] [INFO]   - Iron_Nickel_Kamacite_Particulate    :   1.29%
-[2026-08-14 08:57:59] [INFO]   - Troilite_FeS_Particulate            :  33.23%
-[2026-08-14 08:57:59] [INFO]   - Impact_Glass_Basaltic               :  53.57%
-[2026-08-14 08:57:59] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
-[2026-08-14 08:57:59] [INFO]   - Crustal Grain Density : 3.565 +/- 0.437 g/cm3
-[2026-08-14 08:57:59] [INFO]   - Density Differential  : -0.335 +/- 0.592 g/cm3
-[2026-08-14 08:57:59] [INFO]   - Total Porosity        : 0.00%
-[2026-08-14 08:57:59] [INFO]   - Macroporosity         : 0.00% +/- 0.00%
-[2026-08-14 08:57:59] [INFO]   - Core Volume Fraction  : 7.79%
-[2026-08-14 08:57:59] [INFO]   - Core Mass Fraction    : 15.72% +/- 13.62%
-[2026-08-14 08:57:59] [INFO]   - Goodness-of-Fit       : Chi2_r=0.5646 | SSE=0.000621 | AIC=-189.60 | AICc=-171.60 | BIC=-180.64
-[2026-08-14 08:57:59] [INFO] ------------------------------------------------------------
-[2026-08-14 08:57:59] [INFO] STARTING INVERSION: Target=1P_Halley_Comet | Taxonomy=P | pV=0.04
-[2026-08-14 08:58:00] [INFO] OPTIMIZATION CONVERGED: Target=1P_Halley_Comet | Best Loss=0.000030 | Scale=0.5502 | Space Weathering=0.1654
-[2026-08-14 08:58:00] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
-[2026-08-14 08:58:00] [INFO]   - Antigorite_MgSerpentine_Coarse      :   7.59%
-[2026-08-14 08:58:00] [INFO]   - Cronstedtite_FeSerpentine_Fine      :  11.68%
-[2026-08-14 08:58:00] [INFO]   - Cronstedtite_FeSerpentine_Coarse    :  13.72%
-[2026-08-14 08:58:00] [INFO]   - Nontronite_FeSmectite_Fine          :   5.34%
-[2026-08-14 08:58:00] [INFO]   - Magnetite_Particulate               :  13.53%
-[2026-08-14 08:58:00] [INFO]   - Amorphous_Carbon_Dark               :  19.89%
-[2026-08-14 08:58:00] [INFO]   - Insoluble_Organic_Matter_IOM        :  16.41%
-[2026-08-14 08:58:00] [INFO]   - Ferrihydrite_Iron_Oxide             :   3.13%
-[2026-08-14 08:58:00] [INFO]   - Magnesite_MgCarbonate               :   8.71%
-[2026-08-14 08:58:00] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
-[2026-08-14 08:58:00] [INFO]   - Crustal Grain Density : 2.836 +/- 0.061 g/cm3
-[2026-08-14 08:58:00] [INFO]   - Density Differential  : 2.236 +/- 0.257 g/cm3
-[2026-08-14 08:58:00] [INFO]   - Total Porosity        : 78.85%
-[2026-08-14 08:58:00] [INFO]   - Macroporosity         : 71.80% +/- 12.27%
-[2026-08-14 08:58:00] [INFO]   - Core Volume Fraction  : 0.00%
-[2026-08-14 08:58:00] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
-[2026-08-14 08:58:00] [INFO]   - Goodness-of-Fit       : Chi2_r=0.3732 | SSE=0.000336 | AIC=-197.89 | AICc=-164.89 | BIC=-186.94
-[2026-08-14 08:58:00] [INFO] ------------------------------------------------------------
-[2026-08-14 08:58:00] [INFO] STARTING INVERSION: Target=101955_Bennu_OSIRISREx | Taxonomy=B | pV=0.044
-[2026-08-14 08:58:01] [INFO] OPTIMIZATION CONVERGED: Target=101955_Bennu_OSIRISREx | Best Loss=0.000015 | Scale=0.5312 | Space Weathering=0.0000
-[2026-08-14 08:58:01] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
-[2026-08-14 08:58:01] [INFO]   - Antigorite_MgSerpentine_Fine        :   9.05%
-[2026-08-14 08:58:01] [INFO]   - Antigorite_MgSerpentine_Coarse      :   9.99%
-[2026-08-14 08:58:01] [INFO]   - Cronstedtite_FeSerpentine_Fine      :  12.29%
-[2026-08-14 08:58:01] [INFO]   - Cronstedtite_FeSerpentine_Coarse    :  13.80%
-[2026-08-14 08:58:01] [INFO]   - Saponite_Smectite_Fine              :  10.54%
-[2026-08-14 08:58:01] [INFO]   - Nontronite_FeSmectite_Fine          :   1.40%
-[2026-08-14 08:58:01] [INFO]   - Magnetite_Particulate               :  10.92%
-[2026-08-14 08:58:01] [INFO]   - Amorphous_Carbon_Dark               :  23.27%
-[2026-08-14 08:58:01] [INFO]   - Insoluble_Organic_Matter_IOM        :   5.31%
-[2026-08-14 08:58:01] [INFO]   - Ferrihydrite_Iron_Oxide             :   3.41%
-[2026-08-14 08:58:01] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
-[2026-08-14 08:58:01] [INFO]   - Crustal Grain Density : 2.818 +/- 0.137 g/cm3
-[2026-08-14 08:58:01] [INFO]   - Density Differential  : 1.628 +/- 0.137 g/cm3
-[2026-08-14 08:58:01] [INFO]   - Total Porosity        : 57.77%
-[2026-08-14 08:58:01] [INFO]   - Macroporosity         : 43.69% +/- 2.53%
-[2026-08-14 08:58:01] [INFO]   - Core Volume Fraction  : 0.00%
-[2026-08-14 08:58:01] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
-[2026-08-14 08:58:01] [INFO]   - Goodness-of-Fit       : Chi2_r=0.0493 | SSE=0.000039 | AIC=-238.73 | AICc=-194.16 | BIC=-226.78
-[2026-08-14 08:58:01] [INFO] ------------------------------------------------------------
-[2026-08-14 08:58:01] [INFO] STARTING INVERSION: Target=162173_Ryugu_Hayabusa2 | Taxonomy=C | pV=0.041
-[2026-08-14 08:58:01] [INFO] OPTIMIZATION CONVERGED: Target=162173_Ryugu_Hayabusa2 | Best Loss=0.000015 | Scale=0.5454 | Space Weathering=0.0000
-[2026-08-14 08:58:01] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
-[2026-08-14 08:58:01] [INFO]   - Antigorite_MgSerpentine_Fine        :   4.58%
-[2026-08-14 08:58:01] [INFO]   - Antigorite_MgSerpentine_Coarse      :  12.27%
-[2026-08-14 08:58:01] [INFO]   - Cronstedtite_FeSerpentine_Fine      :  15.60%
-[2026-08-14 08:58:01] [INFO]   - Cronstedtite_FeSerpentine_Coarse    :  17.53%
-[2026-08-14 08:58:01] [INFO]   - Saponite_Smectite_Fine              :   4.55%
-[2026-08-14 08:58:01] [INFO]   - Nontronite_FeSmectite_Fine          :   0.63%
-[2026-08-14 08:58:01] [INFO]   - Magnetite_Particulate               :  13.80%
-[2026-08-14 08:58:01] [INFO]   - Amorphous_Carbon_Dark               :  17.19%
-[2026-08-14 08:58:01] [INFO]   - Insoluble_Organic_Matter_IOM        :   6.40%
-[2026-08-14 08:58:01] [INFO]   - Epsomite_Hydrated_Sulfate           :   3.02%
-[2026-08-14 08:58:01] [INFO]   - Ferrihydrite_Iron_Oxide             :   3.83%
-[2026-08-14 08:58:01] [INFO]   - Magnesite_MgCarbonate               :   0.62%
-[2026-08-14 08:58:01] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
-[2026-08-14 08:58:01] [INFO]   - Crustal Grain Density : 2.984 +/- 0.123 g/cm3
-[2026-08-14 08:58:01] [INFO]   - Density Differential  : 1.794 +/- 0.127 g/cm3
-[2026-08-14 08:58:01] [INFO]   - Total Porosity        : 60.13%
-[2026-08-14 08:58:01] [INFO]   - Macroporosity         : 46.83% +/- 2.61%
-[2026-08-14 08:58:01] [INFO]   - Core Volume Fraction  : 0.00%
-[2026-08-14 08:58:01] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
-[2026-08-14 08:58:01] [INFO]   - Goodness-of-Fit       : Chi2_r=0.0531 | SSE=0.000032 | AIC=-239.00 | AICc=-155.00 | BIC=-225.06
-[2026-08-14 08:58:01] [INFO] ------------------------------------------------------------
-[2026-08-14 08:58:01] [INFO] STARTING INVERSION: Target=2877_Steins_Rosetta | Taxonomy=E | pV=0.34
-[2026-08-14 08:58:02] [INFO] OPTIMIZATION CONVERGED: Target=2877_Steins_Rosetta | Best Loss=0.000222 | Scale=1.2580 | Space Weathering=0.0000
-[2026-08-14 08:58:02] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
-[2026-08-14 08:58:02] [INFO]   - Enstatite_En85_10um                 :   1.76%
-[2026-08-14 08:58:02] [INFO]   - Plagioclase_An80_45um               :  47.90%
-[2026-08-14 08:58:02] [INFO]   - Troilite_FeS_Particulate            :   0.11%
-[2026-08-14 08:58:02] [INFO]   - Impact_Glass_Basaltic               :  50.15%
-[2026-08-14 08:58:02] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
-[2026-08-14 08:58:02] [INFO]   - Crustal Grain Density : 2.754 +/- 0.261 g/cm3
-[2026-08-14 08:58:02] [INFO]   - Density Differential  : 0.754 +/- 0.478 g/cm3
-[2026-08-14 08:58:02] [INFO]   - Total Porosity        : 27.39%
-[2026-08-14 08:58:02] [INFO]   - Macroporosity         : 19.32% +/- 15.23%
-[2026-08-14 08:58:02] [INFO]   - Core Volume Fraction  : 0.00%
-[2026-08-14 08:58:02] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
-[2026-08-14 08:58:02] [INFO]   - Goodness-of-Fit       : Chi2_r=2.4801 | SSE=0.003472 | AIC=-161.17 | AICc=-154.71 | BIC=-155.20
-[2026-08-14 08:58:02] [INFO] BATCH INVERSION COMPLETED SUCCESSFULLY.
+[2026-08-19 05:24:17] [INFO] ================================================================================
+[2026-08-19 05:24:17] [INFO] INITIALIZING PHYSICALLY RIGOROUS BULK INVERSION ENGINE
+[2026-08-19 05:24:17] [INFO] ================================================================================
+[2026-08-19 05:24:17] [INFO] PROCESSING BATCH FILE: validation_targets.csv (15 targets)
+[2026-08-19 05:24:17] [INFO] ------------------------------------------------------------
+[2026-08-19 05:24:17] [INFO] STARTING INVERSION: Target=Saratov_L4_Lab | Taxonomy=S | pV=0.200
+[2026-08-19 05:24:21] [INFO] OPTIMIZATION CONVERGED: Target=Saratov_L4_Lab | Best Loss=0.000089 | Scale=0.8843 | Space Weathering=0.0635
+[2026-08-19 05:24:21] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:24:21] [INFO]   - Forsterite_Fo90_10um                :   7.07%
+[2026-08-19 05:24:21] [INFO]   - Forsterite_Fo90_45um                :  11.14%
+[2026-08-19 05:24:21] [INFO]   - Forsterite_Fo90_125um               :   3.89%
+[2026-08-19 05:24:21] [INFO]   - Fayalite_Fo10_45um                  :   1.52%
+[2026-08-19 05:24:21] [INFO]   - Enstatite_En85_125um                :   8.16%
+[2026-08-19 05:24:21] [INFO]   - Ferrosilite_Fs50_45um               :  22.67%
+[2026-08-19 05:24:21] [INFO]   - Augite_HighCa_45um                  :   9.00%
+[2026-08-19 05:24:21] [INFO]   - Diopside_CrRich_45um                :   2.02%
+[2026-08-19 05:24:21] [INFO]   - Plagioclase_An80_45um               :  18.68%
+[2026-08-19 05:24:21] [INFO]   - Troilite_FeS_Particulate            :   4.23%
+[2026-08-19 05:24:21] [INFO]   - Impact_Glass_Basaltic               :  11.63%
+[2026-08-19 05:24:21] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:24:21] [INFO]   - Crustal Grain Density : 3.342 +/- 0.057 g/cm3
+[2026-08-19 05:24:21] [INFO]   - Density Differential  : -0.188 +/- 0.119 g/cm3
+[2026-08-19 05:24:21] [INFO]   - Total Porosity        : 0.00%
+[2026-08-19 05:24:21] [INFO]   - Macroporosity         : 0.00% +/- 0.00%
+[2026-08-19 05:24:21] [INFO]   - Core Volume Fraction  : 4.15%
+[2026-08-19 05:24:21] [INFO]   - Core Mass Fraction    : 9.25% +/- 4.97%
+[2026-08-19 05:24:21] [INFO]   - Goodness-of-Fit       : Chi2_r=2.1438 | SSE=0.001501 | AIC=-163.95 | AICc=-103.29 | BIC=-151.01
+[2026-08-19 05:24:21] [INFO] ------------------------------------------------------------
+[2026-08-19 05:24:21] [INFO] STARTING INVERSION: Target=Richardton_H5_Lab | Taxonomy=S | pV=0.180
+[2026-08-19 05:24:28] [INFO] OPTIMIZATION CONVERGED: Target=Richardton_H5_Lab | Best Loss=0.000236 | Scale=0.9966 | Space Weathering=-0.0929
+[2026-08-19 05:24:28] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:24:28] [INFO]   - Forsterite_Fo90_10um                :   0.93%
+[2026-08-19 05:24:28] [INFO]   - Forsterite_Fo90_45um                :   9.76%
+[2026-08-19 05:24:28] [INFO]   - Forsterite_Fo90_125um               :   9.31%
+[2026-08-19 05:24:28] [INFO]   - Fayalite_Fo10_45um                  :  32.38%
+[2026-08-19 05:24:28] [INFO]   - Enstatite_En85_125um                :   0.41%
+[2026-08-19 05:24:28] [INFO]   - Ferrosilite_Fs50_45um               :  30.60%
+[2026-08-19 05:24:28] [INFO]   - Augite_HighCa_45um                  :   5.74%
+[2026-08-19 05:24:28] [INFO]   - Plagioclase_An80_45um               :   5.94%
+[2026-08-19 05:24:28] [INFO]   - Impact_Glass_Basaltic               :   4.86%
+[2026-08-19 05:24:28] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:24:28] [INFO]   - Crustal Grain Density : 3.783 +/- 0.078 g/cm3
+[2026-08-19 05:24:28] [INFO]   - Density Differential  : 0.023 +/- 0.112 g/cm3
+[2026-08-19 05:24:28] [INFO]   - Total Porosity        : 0.60%
+[2026-08-19 05:24:28] [INFO]   - Macroporosity         : 0.00% +/- 0.00%
+[2026-08-19 05:24:28] [INFO]   - Core Volume Fraction  : 0.00%
+[2026-08-19 05:24:28] [INFO]   - Core Mass Fraction    : 0.00% +/- 2.78%
+[2026-08-19 05:24:28] [INFO]   - Goodness-of-Fit       : Chi2_r=4.7501 | SSE=0.004275 | AIC=-147.01 | AICc=-114.01 | BIC=-136.06
+[2026-08-19 05:24:28] [INFO] ------------------------------------------------------------
+[2026-08-19 05:24:28] [INFO] STARTING INVERSION: Target=Eros_Blue_Bias_Synth | Taxonomy=S | pV=0.290
+[2026-08-19 05:24:31] [INFO] OPTIMIZATION CONVERGED: Target=Eros_Blue_Bias_Synth | Best Loss=0.000241 | Scale=1.0807 | Space Weathering=-0.1151
+[2026-08-19 05:24:31] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:24:31] [INFO]   - Forsterite_Fo90_10um                :   5.88%
+[2026-08-19 05:24:31] [INFO]   - Fayalite_Fo10_45um                  :  19.25%
+[2026-08-19 05:24:31] [INFO]   - Ferrosilite_Fs50_45um               :  13.70%
+[2026-08-19 05:24:31] [INFO]   - Plagioclase_An80_45um               :  41.43%
+[2026-08-19 05:24:31] [INFO]   - Impact_Glass_Basaltic               :  19.74%
+[2026-08-19 05:24:31] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:24:31] [INFO]   - Crustal Grain Density : 3.251 +/- 0.033 g/cm3
+[2026-08-19 05:24:31] [INFO]   - Density Differential  : 0.581 +/- 0.119 g/cm3
+[2026-08-19 05:24:31] [INFO]   - Total Porosity        : 17.88%
+[2026-08-19 05:24:31] [INFO]   - Macroporosity         : 8.75% +/- 3.92%
+[2026-08-19 05:24:31] [INFO]   - Core Volume Fraction  : 0.00%
+[2026-08-19 05:24:31] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
+[2026-08-19 05:24:31] [INFO]   - Goodness-of-Fit       : Chi2_r=3.2876 | SSE=0.004274 | AIC=-155.02 | AICc=-145.69 | BIC=-148.05
+[2026-08-19 05:24:31] [INFO] ------------------------------------------------------------
+[2026-08-19 05:24:31] [INFO] STARTING INVERSION: Target=4179_Toutatis_ChangE2 | Taxonomy=S | pV=0.280
+[2026-08-19 05:24:37] [INFO] OPTIMIZATION CONVERGED: Target=4179_Toutatis_ChangE2 | Best Loss=0.000190 | Scale=1.0199 | Space Weathering=0.0538
+[2026-08-19 05:24:37] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:24:37] [INFO]   - Forsterite_Fo90_10um                :  16.21%
+[2026-08-19 05:24:37] [INFO]   - Forsterite_Fo90_45um                :  10.16%
+[2026-08-19 05:24:37] [INFO]   - Forsterite_Fo90_125um               :   1.57%
+[2026-08-19 05:24:37] [INFO]   - Fayalite_Fo10_45um                  :   1.93%
+[2026-08-19 05:24:37] [INFO]   - Enstatite_En85_125um                :   2.85%
+[2026-08-19 05:24:37] [INFO]   - Ferrosilite_Fs50_45um               :  18.82%
+[2026-08-19 05:24:37] [INFO]   - Diopside_CrRich_45um                :   1.35%
+[2026-08-19 05:24:37] [INFO]   - Plagioclase_An80_45um               :  26.93%
+[2026-08-19 05:24:37] [INFO]   - Impact_Glass_Basaltic               :  20.18%
+[2026-08-19 05:24:37] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:24:37] [INFO]   - Crustal Grain Density : 3.155 +/- 0.073 g/cm3
+[2026-08-19 05:24:37] [INFO]   - Density Differential  : 1.055 +/- 0.221 g/cm3
+[2026-08-19 05:24:37] [INFO]   - Total Porosity        : 33.43%
+[2026-08-19 05:24:37] [INFO]   - Macroporosity         : 26.03% +/- 7.30%
+[2026-08-19 05:24:37] [INFO]   - Core Volume Fraction  : 0.00%
+[2026-08-19 05:24:37] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
+[2026-08-19 05:24:37] [INFO]   - Goodness-of-Fit       : Chi2_r=3.8047 | SSE=0.003424 | AIC=-151.45 | AICc=-118.45 | BIC=-140.50
+[2026-08-19 05:24:37] [INFO] ------------------------------------------------------------
+[2026-08-19 05:24:37] [INFO] STARTING INVERSION: Target=21_Lutetia_Rosetta | Taxonomy=M | pV=0.190
+[2026-08-19 05:24:40] [INFO] OPTIMIZATION CONVERGED: Target=21_Lutetia_Rosetta | Best Loss=0.000055 | Scale=0.8407 | Space Weathering=-0.0657
+[2026-08-19 05:24:40] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:24:40] [INFO]   - Forsterite_Fo90_10um                :  21.24%
+[2026-08-19 05:24:40] [INFO]   - Enstatite_En85_10um                 :   1.17%
+[2026-08-19 05:24:40] [INFO]   - Plagioclase_An80_45um               :  25.45%
+[2026-08-19 05:24:40] [INFO]   - Iron_Nickel_Kamacite_Particulate    :  10.98%
+[2026-08-19 05:24:40] [INFO]   - Troilite_FeS_Particulate            :  26.81%
+[2026-08-19 05:24:40] [INFO]   - Impact_Glass_Basaltic               :  14.35%
+[2026-08-19 05:24:40] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:24:40] [INFO]   - Crustal Grain Density : 3.971 +/- 0.143 g/cm3
+[2026-08-19 05:24:40] [INFO]   - Density Differential  : 0.571 +/- 0.333 g/cm3
+[2026-08-19 05:24:40] [INFO]   - Total Porosity        : 14.39%
+[2026-08-19 05:24:40] [INFO]   - Macroporosity         : 4.88% +/- 7.43%
+[2026-08-19 05:24:40] [INFO]   - Core Volume Fraction  : 0.00%
+[2026-08-19 05:24:40] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.87%
+[2026-08-19 05:24:40] [INFO]   - Goodness-of-Fit       : Chi2_r=0.5550 | SSE=0.000666 | AIC=-190.20 | AICc=-177.11 | BIC=-182.23
+[2026-08-19 05:24:40] [INFO] ------------------------------------------------------------
+[2026-08-19 05:24:40] [INFO] STARTING INVERSION: Target=16_Psyche_Astronomical | Taxonomy=M | pV=0.120
+[2026-08-19 05:24:42] [INFO] OPTIMIZATION CONVERGED: Target=16_Psyche_Astronomical | Best Loss=0.000033 | Scale=0.5491 | Space Weathering=-0.0172
+[2026-08-19 05:24:42] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:24:42] [INFO]   - Forsterite_Fo90_10um                :  19.26%
+[2026-08-19 05:24:42] [INFO]   - Fayalite_Fo10_45um                  :   0.36%
+[2026-08-19 05:24:42] [INFO]   - Enstatite_En85_10um                 :   5.67%
+[2026-08-19 05:24:42] [INFO]   - Plagioclase_An80_45um               :  19.95%
+[2026-08-19 05:24:42] [INFO]   - Iron_Nickel_Kamacite_Particulate    :  17.32%
+[2026-08-19 05:24:42] [INFO]   - Troilite_FeS_Particulate            :  23.51%
+[2026-08-19 05:24:42] [INFO]   - Impact_Glass_Basaltic               :  13.94%
+[2026-08-19 05:24:42] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:24:42] [INFO]   - Crustal Grain Density : 4.245 +/- 0.093 g/cm3
+[2026-08-19 05:24:42] [INFO]   - Density Differential  : 0.345 +/- 0.416 g/cm3
+[2026-08-19 05:24:42] [INFO]   - Total Porosity        : 8.13%
+[2026-08-19 05:24:42] [INFO]   - Macroporosity         : 0.00% +/- 6.02%
+[2026-08-19 05:24:42] [INFO]   - Core Volume Fraction  : 0.00%
+[2026-08-19 05:24:42] [INFO]   - Core Mass Fraction    : 0.00% +/- 5.07%
+[2026-08-19 05:24:42] [INFO]   - Goodness-of-Fit       : Chi2_r=0.2695 | SSE=0.000296 | AIC=-204.39 | AICc=-186.39 | BIC=-195.42
+[2026-08-19 05:24:42] [INFO] ------------------------------------------------------------
+[2026-08-19 05:24:42] [INFO] STARTING INVERSION: Target=101955_Bennu_OSIRISREx | Taxonomy=B | pV=0.044
+[2026-08-19 05:24:45] [INFO] OPTIMIZATION CONVERGED: Target=101955_Bennu_OSIRISREx | Best Loss=0.000014 | Scale=0.6320 | Space Weathering=-0.0305
+[2026-08-19 05:24:45] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:24:45] [INFO]   - Antigorite_MgSerpentine_Fine        :   1.40%
+[2026-08-19 05:24:45] [INFO]   - Antigorite_MgSerpentine_Coarse      :   8.58%
+[2026-08-19 05:24:45] [INFO]   - Cronstedtite_FeSerpentine_Fine      :  13.21%
+[2026-08-19 05:24:45] [INFO]   - Cronstedtite_FeSerpentine_Coarse    :  15.80%
+[2026-08-19 05:24:45] [INFO]   - Saponite_Smectite_Fine              :   4.59%
+[2026-08-19 05:24:45] [INFO]   - Nontronite_FeSmectite_Fine          :   1.73%
+[2026-08-19 05:24:45] [INFO]   - Magnetite_Particulate               :  15.10%
+[2026-08-19 05:24:45] [INFO]   - Amorphous_Carbon_Dark               :  16.43%
+[2026-08-19 05:24:45] [INFO]   - Insoluble_Organic_Matter_IOM        :  14.26%
+[2026-08-19 05:24:45] [INFO]   - Epsomite_Hydrated_Sulfate           :   1.31%
+[2026-08-19 05:24:45] [INFO]   - Ferrihydrite_Iron_Oxide             :   4.99%
+[2026-08-19 05:24:45] [INFO]   - Magnesite_MgCarbonate               :   2.61%
+[2026-08-19 05:24:45] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:24:45] [INFO]   - Crustal Grain Density : 2.939 +/- 0.046 g/cm3
+[2026-08-19 05:24:45] [INFO]   - Density Differential  : 1.749 +/- 0.047 g/cm3
+[2026-08-19 05:24:45] [INFO]   - Total Porosity        : 59.52%
+[2026-08-19 05:24:45] [INFO]   - Macroporosity         : 46.02% +/- 0.97%
+[2026-08-19 05:24:45] [INFO]   - Core Volume Fraction  : 0.00%
+[2026-08-19 05:24:45] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
+[2026-08-19 05:24:45] [INFO]   - Goodness-of-Fit       : Chi2_r=0.0592 | SSE=0.000036 | AIC=-236.83 | AICc=-152.83 | BIC=-222.89
+[2026-08-19 05:24:46] [INFO] ------------------------------------------------------------
+[2026-08-19 05:24:46] [INFO] STARTING INVERSION: Target=162173_Ryugu_Hayabusa2 | Taxonomy=C | pV=0.041
+[2026-08-19 05:24:50] [INFO] OPTIMIZATION CONVERGED: Target=162173_Ryugu_Hayabusa2 | Best Loss=0.000015 | Scale=0.6448 | Space Weathering=-0.0504
+[2026-08-19 05:24:50] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:24:50] [INFO]   - Antigorite_MgSerpentine_Fine        :   4.04%
+[2026-08-19 05:24:50] [INFO]   - Antigorite_MgSerpentine_Coarse      :   6.80%
+[2026-08-19 05:24:50] [INFO]   - Cronstedtite_FeSerpentine_Fine      :  12.90%
+[2026-08-19 05:24:50] [INFO]   - Cronstedtite_FeSerpentine_Coarse    :  16.79%
+[2026-08-19 05:24:50] [INFO]   - Saponite_Smectite_Fine              :   0.53%
+[2026-08-19 05:24:50] [INFO]   - Nontronite_FeSmectite_Fine          :   0.29%
+[2026-08-19 05:24:50] [INFO]   - Magnetite_Particulate               :  15.37%
+[2026-08-19 05:24:50] [INFO]   - Amorphous_Carbon_Dark               :  17.88%
+[2026-08-19 05:24:50] [INFO]   - Insoluble_Organic_Matter_IOM        :  13.32%
+[2026-08-19 05:24:50] [INFO]   - Epsomite_Hydrated_Sulfate           :   0.88%
+[2026-08-19 05:24:50] [INFO]   - Ferrihydrite_Iron_Oxide             :   8.91%
+[2026-08-19 05:24:50] [INFO]   - Magnesite_MgCarbonate               :   2.29%
+[2026-08-19 05:24:50] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:24:50] [INFO]   - Crustal Grain Density : 3.025 +/- 0.060 g/cm3
+[2026-08-19 05:24:50] [INFO]   - Density Differential  : 1.835 +/- 0.067 g/cm3
+[2026-08-19 05:24:50] [INFO]   - Total Porosity        : 60.66%
+[2026-08-19 05:24:50] [INFO]   - Macroporosity         : 47.55% +/- 1.77%
+[2026-08-19 05:24:50] [INFO]   - Core Volume Fraction  : 0.00%
+[2026-08-19 05:24:50] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
+[2026-08-19 05:24:50] [INFO]   - Goodness-of-Fit       : Chi2_r=0.0656 | SSE=0.000039 | AIC=-234.76 | AICc=-150.76 | BIC=-220.82
+[2026-08-19 05:24:50] [INFO] ------------------------------------------------------------
+[2026-08-19 05:24:50] [INFO] STARTING INVERSION: Target=2877_Steins_Rosetta | Taxonomy=E | pV=0.340
+[2026-08-19 05:24:52] [INFO] OPTIMIZATION CONVERGED: Target=2877_Steins_Rosetta | Best Loss=0.000164 | Scale=1.7654 | Space Weathering=-0.1640
+[2026-08-19 05:24:52] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:24:52] [INFO]   - Forsterite_Fo90_10um                :   0.19%
+[2026-08-19 05:24:52] [INFO]   - Plagioclase_An80_45um               :  38.46%
+[2026-08-19 05:24:52] [INFO]   - Iron_Nickel_Kamacite_Particulate    :  15.42%
+[2026-08-19 05:24:52] [INFO]   - Troilite_FeS_Particulate            :  39.21%
+[2026-08-19 05:24:52] [INFO]   - Impact_Glass_Basaltic               :   6.72%
+[2026-08-19 05:24:52] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:24:52] [INFO]   - Crustal Grain Density : 4.350 +/- 0.144 g/cm3
+[2026-08-19 05:24:52] [INFO]   - Density Differential  : 2.350 +/- 0.430 g/cm3
+[2026-08-19 05:24:52] [INFO]   - Total Porosity        : 54.03%
+[2026-08-19 05:24:52] [INFO]   - Macroporosity         : 48.92% +/- 10.45%
+[2026-08-19 05:24:52] [INFO]   - Core Volume Fraction  : 0.00%
+[2026-08-19 05:24:52] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
+[2026-08-19 05:24:52] [INFO]   - Goodness-of-Fit       : Chi2_r=2.0148 | SSE=0.002619 | AIC=-164.81 | AICc=-155.48 | BIC=-157.84
+[2026-08-19 05:24:52] [INFO] ------------------------------------------------------------
+[2026-08-19 05:24:52] [INFO] STARTING INVERSION: Target=Allende_CV3_Lab | Taxonomy=C | pV=0.045
+[2026-08-19 05:24:55] [INFO] OPTIMIZATION CONVERGED: Target=Allende_CV3_Lab | Best Loss=0.000015 | Scale=0.6487 | Space Weathering=-0.0421
+[2026-08-19 05:24:55] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:24:55] [INFO]   - Antigorite_MgSerpentine_Fine        :   0.33%
+[2026-08-19 05:24:55] [INFO]   - Antigorite_MgSerpentine_Coarse      :   9.76%
+[2026-08-19 05:24:55] [INFO]   - Cronstedtite_FeSerpentine_Fine      :  13.89%
+[2026-08-19 05:24:55] [INFO]   - Cronstedtite_FeSerpentine_Coarse    :  16.34%
+[2026-08-19 05:24:55] [INFO]   - Nontronite_FeSmectite_Fine          :   2.69%
+[2026-08-19 05:24:55] [INFO]   - Magnetite_Particulate               :  14.82%
+[2026-08-19 05:24:55] [INFO]   - Amorphous_Carbon_Dark               :  15.58%
+[2026-08-19 05:24:55] [INFO]   - Insoluble_Organic_Matter_IOM        :  13.60%
+[2026-08-19 05:24:55] [INFO]   - Epsomite_Hydrated_Sulfate           :   3.92%
+[2026-08-19 05:24:55] [INFO]   - Ferrihydrite_Iron_Oxide             :   6.62%
+[2026-08-19 05:24:55] [INFO]   - Magnesite_MgCarbonate               :   2.41%
+[2026-08-19 05:24:55] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:24:55] [INFO]   - Crustal Grain Density : 2.966 +/- 0.045 g/cm3
+[2026-08-19 05:24:55] [INFO]   - Density Differential  : 0.016 +/- 0.066 g/cm3
+[2026-08-19 05:24:55] [INFO]   - Total Porosity        : 0.55%
+[2026-08-19 05:24:55] [INFO]   - Macroporosity         : 0.00% +/- 0.00%
+[2026-08-19 05:24:55] [INFO]   - Core Volume Fraction  : 0.00%
+[2026-08-19 05:24:55] [INFO]   - Core Mass Fraction    : 0.00% +/- 2.60%
+[2026-08-19 05:24:55] [INFO]   - Goodness-of-Fit       : Chi2_r=0.0598 | SSE=0.000042 | AIC=-235.54 | AICc=-174.87 | BIC=-222.59
+[2026-08-19 05:24:55] [INFO] ------------------------------------------------------------
+[2026-08-19 05:24:55] [INFO] STARTING INVERSION: Target=Murchison_CM2_Lab | Taxonomy=C | pV=0.035
+[2026-08-19 05:25:00] [INFO] OPTIMIZATION CONVERGED: Target=Murchison_CM2_Lab | Best Loss=0.000015 | Scale=0.6091 | Space Weathering=-0.0758
+[2026-08-19 05:25:00] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:25:00] [INFO]   - Antigorite_MgSerpentine_Fine        :   4.32%
+[2026-08-19 05:25:00] [INFO]   - Antigorite_MgSerpentine_Coarse      :   7.85%
+[2026-08-19 05:25:00] [INFO]   - Cronstedtite_FeSerpentine_Fine      :  14.06%
+[2026-08-19 05:25:00] [INFO]   - Cronstedtite_FeSerpentine_Coarse    :  18.14%
+[2026-08-19 05:25:00] [INFO]   - Saponite_Smectite_Fine              :   1.87%
+[2026-08-19 05:25:00] [INFO]   - Nontronite_FeSmectite_Fine          :   0.85%
+[2026-08-19 05:25:00] [INFO]   - Magnetite_Particulate               :  16.48%
+[2026-08-19 05:25:00] [INFO]   - Amorphous_Carbon_Dark               :  17.48%
+[2026-08-19 05:25:00] [INFO]   - Insoluble_Organic_Matter_IOM        :  13.82%
+[2026-08-19 05:25:00] [INFO]   - Ferrihydrite_Iron_Oxide             :   5.13%
+[2026-08-19 05:25:00] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:25:00] [INFO]   - Crustal Grain Density : 3.010 +/- 0.065 g/cm3
+[2026-08-19 05:25:00] [INFO]   - Density Differential  : 0.890 +/- 0.088 g/cm3
+[2026-08-19 05:25:00] [INFO]   - Total Porosity        : 29.56%
+[2026-08-19 05:25:00] [INFO]   - Macroporosity         : 6.08% +/- 3.13%
+[2026-08-19 05:25:00] [INFO]   - Core Volume Fraction  : 0.00%
+[2026-08-19 05:25:00] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
+[2026-08-19 05:25:00] [INFO]   - Goodness-of-Fit       : Chi2_r=0.0171 | SSE=0.000014 | AIC=-259.88 | AICc=-215.31 | BIC=-247.93
+[2026-08-19 05:25:00] [INFO] ------------------------------------------------------------
+[2026-08-19 05:25:00] [INFO] STARTING INVERSION: Target=Johnstown_Diogenite_Lab | Taxonomy=V | pV=0.320
+[2026-08-19 05:25:04] [INFO] OPTIMIZATION CONVERGED: Target=Johnstown_Diogenite_Lab | Best Loss=0.001862 | Scale=2.2796 | Space Weathering=-0.1492
+[2026-08-19 05:25:04] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:25:04] [INFO]   - Fayalite_Fo10_45um                  :  53.86%
+[2026-08-19 05:25:04] [INFO]   - Enstatite_En85_125um                :  33.59%
+[2026-08-19 05:25:04] [INFO]   - Ferrosilite_Fs50_45um               :  12.55%
+[2026-08-19 05:25:04] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:25:04] [INFO]   - Crustal Grain Density : 3.936 +/- 0.063 g/cm3
+[2026-08-19 05:25:04] [INFO]   - Density Differential  : 0.686 +/- 0.097 g/cm3
+[2026-08-19 05:25:04] [INFO]   - Total Porosity        : 17.43%
+[2026-08-19 05:25:04] [INFO]   - Macroporosity         : 8.25% +/- 2.57%
+[2026-08-19 05:25:04] [INFO]   - Core Volume Fraction  : 0.00%
+[2026-08-19 05:25:04] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
+[2026-08-19 05:25:04] [INFO]   - Goodness-of-Fit       : Chi2_r=24.2262 | SSE=0.036339 | AIC=-116.21 | AICc=-111.93 | BIC=-111.23
+[2026-08-19 05:25:04] [INFO] ------------------------------------------------------------
+[2026-08-19 05:25:04] [INFO] STARTING INVERSION: Target=Abee_EH4_Lab | Taxonomy=E | pV=0.120
+[2026-08-19 05:25:08] [INFO] OPTIMIZATION CONVERGED: Target=Abee_EH4_Lab | Best Loss=0.000043 | Scale=0.6627 | Space Weathering=0.0346
+[2026-08-19 05:25:08] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:25:08] [INFO]   - Forsterite_Fo90_10um                :  14.62%
+[2026-08-19 05:25:08] [INFO]   - Fayalite_Fo10_45um                  :   4.37%
+[2026-08-19 05:25:08] [INFO]   - Enstatite_En85_10um                 :   1.03%
+[2026-08-19 05:25:08] [INFO]   - Plagioclase_An80_45um               :  14.31%
+[2026-08-19 05:25:08] [INFO]   - Iron_Nickel_Kamacite_Particulate    :  23.56%
+[2026-08-19 05:25:08] [INFO]   - Troilite_FeS_Particulate            :  24.21%
+[2026-08-19 05:25:08] [INFO]   - Impact_Glass_Basaltic               :  17.90%
+[2026-08-19 05:25:08] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:25:08] [INFO]   - Crustal Grain Density : 4.603 +/- 0.166 g/cm3
+[2026-08-19 05:25:08] [INFO]   - Density Differential  : 1.053 +/- 0.191 g/cm3
+[2026-08-19 05:25:08] [INFO]   - Total Porosity        : 22.88%
+[2026-08-19 05:25:08] [INFO]   - Macroporosity         : 14.32% +/- 4.08%
+[2026-08-19 05:25:08] [INFO]   - Core Volume Fraction  : 0.00%
+[2026-08-19 05:25:08] [INFO]   - Core Mass Fraction    : 0.00% +/- 0.00%
+[2026-08-19 05:25:08] [INFO]   - Goodness-of-Fit       : Chi2_r=0.4364 | SSE=0.000480 | AIC=-194.75 | AICc=-176.75 | BIC=-185.78
+[2026-08-19 05:25:08] [INFO] ------------------------------------------------------------
+[2026-08-19 05:25:08] [INFO] STARTING INVERSION: Target=Gibeon_Iron_IVA_Lab | Taxonomy=M | pV=0.140
+[2026-08-19 05:25:12] [INFO] OPTIMIZATION CONVERGED: Target=Gibeon_Iron_IVA_Lab | Best Loss=0.000059 | Scale=0.6849 | Space Weathering=-0.0667
+[2026-08-19 05:25:12] [INFO] INVERTED MINERAL COMPOSITION BREAKDOWN:
+[2026-08-19 05:25:12] [INFO]   - Forsterite_Fo90_10um                :  19.63%
+[2026-08-19 05:25:12] [INFO]   - Fayalite_Fo10_45um                  :   4.83%
+[2026-08-19 05:25:12] [INFO]   - Plagioclase_An80_45um               :  20.55%
+[2026-08-19 05:25:12] [INFO]   - Iron_Nickel_Kamacite_Particulate    :   8.10%
+[2026-08-19 05:25:12] [INFO]   - Troilite_FeS_Particulate            :  28.35%
+[2026-08-19 05:25:12] [INFO]   - Impact_Glass_Basaltic               :  18.54%
+[2026-08-19 05:25:12] [INFO] GEOPHYSICAL & STATISTICAL PARAMETERS:
+[2026-08-19 05:25:12] [INFO]   - Crustal Grain Density : 3.923 +/- 0.130 g/cm3
+[2026-08-19 05:25:12] [INFO]   - Density Differential  : -3.877 +/- 0.198 g/cm3
+[2026-08-19 05:25:12] [INFO]   - Total Porosity        : 0.00%
+[2026-08-19 05:25:12] [INFO]   - Macroporosity         : 0.00% +/- 0.00%
+[2026-08-19 05:25:12] [INFO]   - Core Volume Fraction  : 98.23%
+[2026-08-19 05:25:12] [INFO]   - Core Mass Fraction    : 99.11% +/- 1.36%
+[2026-08-19 05:25:12] [INFO]   - Goodness-of-Fit       : Chi2_r=0.6343 | SSE=0.000761 | AIC=-187.53 | AICc=-174.44 | BIC=-179.56
+[2026-08-19 05:25:12] [INFO] BATCH INVERSION COMPLETED SUCCESSFULLY.

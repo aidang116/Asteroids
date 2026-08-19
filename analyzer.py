@@ -1,7 +1,9 @@
 """
 Spectroscopic Bulk Inversion Framework for Minor Planetary Bodies.
-Quantitative compositional and physical bulk parameter derivation engine with
-Hapke phase function corrections, Monte Carlo uncertainty propagation, and AICc metrics.
+
+This module provides an engine for quantitative mineralogical unmixing and 
+bulk physical parameter derivation (grain density, porosity, core mass fraction) 
+using Hapke radiative transfer approximations and SLSQP constrained optimization.
 """
 
 import os
@@ -13,22 +15,39 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 
+# Suppress expected optimization warnings from boundary conditions in scipy SLSQP
 warnings.filterwarnings("ignore", message=".*Values in x were outside bounds.*")
 warnings.filterwarnings("ignore", category=RuntimeWarning, module=".*slsqp.*")
 
 
-def setup_logger(log_file_path: str = "log.txt", verbose: bool = True) -> logging.Logger:
-    """Configures file and console logging for inversion tracking."""
+def configure_logger(log_path: str = "log.txt", verbose: bool = True) -> logging.Logger:
+    """
+    Configures file and stream logging handlers for the inversion pipeline.
+
+    Parameters
+    ----------
+    log_path : str
+        Path to the output log file.
+    verbose : bool
+        If True, log outputs to stdout as well as to file.
+
+    Returns
+    -------
+    logging.Logger
+        Configured Logger object instance.
+    """
     logger = logging.getLogger("BulkInversion")
     logger.setLevel(logging.INFO if verbose else logging.WARNING)
     logger.handlers.clear()
 
     formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
-    file_handler = logging.FileHandler(log_file_path, mode="w")
+    # Initialize file logging handler
+    file_handler = logging.FileHandler(log_path, mode="w")
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
+    # Initialize console stream handler if verbosity is requested
     if verbose:
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
@@ -39,300 +58,471 @@ def setup_logger(log_file_path: str = "log.txt", verbose: bool = True) -> loggin
 
 class SpectroscopicBulkInversion:
     """
-    Geophysical Inversion Framework for Minor Bodies.
-    Derives regolith grain densities, density differentials,
-    total/macroporosity fractions, and core mass/volume fractions.
+    Spectroscopic and geophysical unmixing inversion model for asteroid spectra.
+
+    Derives mineral volume fractions, crustal grain densities, macroporosity,
+    and potential core mass/volume fractions based on reflectance spectra.
     """
+
+    # Minimum albedo threshold below which data quality is considered insufficient
+    MIN_ALBEDO_THRESHOLD: float = 0.01
+    
+    # Standard iron-nickel endmember bulk density (g/cm^3)
+    IRON_CORE_DENSITY: float = 7.87
 
     def __init__(
         self,
         stony_lib_path: str = "stony_metallic_library.csv",
         primitive_lib_path: str = "primitive_aqueous_library.csv",
         logger: Optional[logging.Logger] = None,
-        verbose_logging: bool = True
+        verbose: bool = True,
+        n_mc: int = 200,
     ) -> None:
-        self.verbose_logging = verbose_logging
-        self.logger = logger if logger else setup_logger(verbose=verbose_logging)
+        """
+        Initializes the inversion model by loading spectrum libraries.
+
+        Parameters
+        ----------
+        stony_lib_path : str
+            Path to CSV file containing stony/metallic mineral endmembers.
+        primitive_lib_path : str
+            Path to CSV file containing primitive/hydrated mineral endmembers.
+        logger : Optional[logging.Logger]
+            Existing logging instance, or None to generate a new logger.
+        verbose : bool
+            Enable verbose logging output.
+        n_mc : int
+            Number of Monte Carlo iterations for parameter error propagation.
+        """
+        self.verbose = verbose
+        self.logger = logger if logger is not None else configure_logger(verbose=verbose)
         self.stony_lib_path = stony_lib_path
         self.primitive_lib_path = primitive_lib_path
+        self.n_mc = n_mc
 
-        self.stony_lib, self.stony_ssa_raw, self.stony_wvs = self._load_and_prep_library(stony_lib_path)
-        self.primitive_lib, self.primitive_ssa_raw, self.primitive_wvs = self._load_and_prep_library(primitive_lib_path)
+        # Load endmember spectral libraries
+        self.stony_lib, self.stony_ssa, self.stony_wvs = self._load_library(stony_lib_path)
+        self.primitive_lib, self.primitive_ssa, self.primitive_wvs = self._load_library(primitive_lib_path)
 
-        if self.verbose_logging:
+        if self.verbose:
             self.logger.info("=" * 80)
             self.logger.info("INITIALIZING PHYSICALLY RIGOROUS BULK INVERSION ENGINE")
             self.logger.info("=" * 80)
 
-    def _load_and_prep_library(self, path: str) -> Tuple[Optional[pd.DataFrame], Optional[np.ndarray], Optional[np.ndarray]]:
-        """Loads endmember library and converts laboratory reflectances to Single Scattering Albedo (SSA)."""
+    def _load_library(self, path: str) -> Tuple[Optional[pd.DataFrame], Optional[np.ndarray], Optional[np.ndarray]]:
+        """
+        Reads spectral endmember library CSV and converts reflectance to Single Scattering Albedo (SSA).
+
+        Parameters
+        ----------
+        path : str
+            Path to the endmember library CSV.
+
+        Returns
+        -------
+        Tuple[Optional[pd.DataFrame], Optional[np.ndarray], Optional[np.ndarray]]
+            Parsed DataFrame, calculated matrix of SSA values (N_minerals x N_wavelengths), 
+            and sorted wavelength values in micrometers.
+        """
         if not os.path.exists(path):
-            if self.verbose_logging:
+            if self.verbose:
                 self.logger.error(f"Library file missing: {path}")
             return None, None, None
 
         df = pd.read_csv(path)
-        renames = {col: "Mineral_Name" for col in df.columns if "mineral_name" in col.lower()}
-        df = df.rename(columns=renames)
+        
+        # Standardize mineral name header
+        name_columns = [col for col in df.columns if "mineral_name" in col.lower()]
+        if name_columns:
+            df = df.rename(columns={name_columns[0]: "Mineral_Name"})
 
-        wv_cols = [c for c in df.columns if str(c).lower().startswith("wv_")]
-        lib_wvs = np.array([float(str(c).lower().replace("wv_", "")) for c in wv_cols])
+        # Identify and sort wavelength columns (formatted as 'Wv_X.X' or 'wv_X.X')
+        wv_cols = [col for col in df.columns if str(col).lower().startswith("wv_")]
+        wavelengths = np.array([float(str(col).lower().replace("wv_", "")) for col in wv_cols])
 
-        refl_matrix = df[wv_cols].values.astype(float)
-        ssa_matrix = self.reflectance_to_ssa(refl_matrix)
+        # Ensure strict ascending order for wavelength channels
+        sorted_indices = np.argsort(wavelengths)
+        wavelengths = wavelengths[sorted_indices]
+        wv_cols = [wv_cols[i] for i in sorted_indices]
 
-        return df, ssa_matrix, lib_wvs
+        # Extract reflectance array and calculate Hapke Single Scattering Albedo (SSA)
+        reflectance_matrix = df[wv_cols].values.astype(float)
+        ssa_matrix = self.reflectance_to_ssa(reflectance_matrix)
+
+        return df, ssa_matrix, wavelengths
 
     @staticmethod
-    def extract_field(profile: pd.Series, candidate_keys: List[str], default_val: Any = None) -> Any:
-        """Normalizes heterogeneous catalog headers."""
-        for key in candidate_keys:
-            if key in profile.index and not pd.isna(profile[key]):
-                return profile[key]
-            for col in profile.index:
-                if str(col).lower() == key.lower() and not pd.isna(profile[col]):
-                    return profile[col]
-        return default_val
+    def extract_field(series: pd.Series, keys: List[str], default: Any = None) -> Any:
+        """
+        Extracts a scalar value from a Pandas Series matching candidate key aliases.
 
-    def assert_boundary_constraints(self, target_profile: pd.Series) -> bool:
-        """Enforces physical boundary conditions and checks for invalid data."""
-        target_name = self.extract_field(target_profile, ["Asteroid_Name", "name", "designation"], "Unknown")
-        
-        albedo = float(self.extract_field(target_profile, ["Albedo", "pV", "pv", "p_v"], 0.15))
-        if albedo <= 0.0:
-            raise ValueError(f"Target '{target_name}': Geometric albedo pV ({albedo}) must be strictly positive.")
+        Parameters
+        ----------
+        series : pd.Series
+            Target data row.
+        keys : List[str]
+            List of alias strings to search for in series index.
+        default : Any
+            Fallback value if no valid field matches.
 
-        bulk_density = float(self.extract_field(target_profile, ["Bulk_Density_gcm3", "bulk_density", "density"], 2.5))
+        Returns
+        -------
+        Any
+            Extracted field value cast to target default type.
+        """
+        for key in keys:
+            # Case-exact match check
+            if key in series.index and not pd.isna(series[key]):
+                val = series[key]
+                try:
+                    if isinstance(default, float):
+                        return float(val)
+                    if isinstance(default, int):
+                        return int(val)
+                    return str(val)
+                except (ValueError, TypeError):
+                    return default
+            
+            # Case-insensitive match check
+            for col in series.index:
+                if str(col).lower() == key.lower() and not pd.isna(series[col]):
+                    val = series[col]
+                    try:
+                        if isinstance(default, float):
+                            return float(val)
+                        if isinstance(default, int):
+                            return int(val)
+                        return str(val)
+                    except (ValueError, TypeError):
+                        return default
+
+        return default
+
+    def validate_target_constraints(self, target: pd.Series) -> bool:
+        """
+        Validates target parameter constraints and raises exceptions for invalid targets.
+
+        Parameters
+        ----------
+        target : pd.Series
+            Target profile containing observational physical properties.
+
+        Returns
+        -------
+        bool
+            Returns True if all boundary conditions are satisfied.
+        """
+        name = str(self.extract_field(target, ["Asteroid_Name", "name", "designation"], "Unknown"))
+        taxonomy = str(self.extract_field(target, ["Taxonomic_Type", "taxonomy", "tax_type"], "")).upper().strip()
+
+        # Step 1: Reject cometary targets due to active outgassing and non-static surface regolith
+        is_comet = (
+            taxonomy in {"COMET", "C/", "P/", "COM"}
+            or name.startswith("1P/")
+            or name.startswith("67P/")
+            or "COMET " in name.upper()
+        )
+        if is_comet:
+            raise ValueError(
+                f"Target '{name}': Cometary bodies are excluded from spectroscopic bulk inversion "
+                f"due to active volatile outgassing and non-static surface regolith processes."
+            )
+
+        # Step 2: Reject targets below minimum geometric albedo threshold
+        albedo = float(self.extract_field(target, ["Albedo", "pV", "pv", "p_v"], 0.15))
+        if albedo < self.MIN_ALBEDO_THRESHOLD:
+            raise ValueError(
+                f"Target '{name}': Geometric albedo pV ({albedo:.3f}) is below the minimum threshold "
+                f"({self.MIN_ALBEDO_THRESHOLD:.2f}) required for effective spectroscopic inversion."
+            )
+
+        # Step 3: Validate physical positivity of bulk density
+        bulk_density = float(self.extract_field(target, ["Bulk_Density_gcm3", "bulk_density", "density"], 2.5))
         if bulk_density <= 0.0:
-            raise ValueError(f"Target '{target_name}': Bulk density ({bulk_density} g/cm³) must be positive.")
+            raise ValueError(f"Target '{name}': Bulk density ({bulk_density} g/cm³) must be strictly positive.")
 
-        target_wv, target_refl = self._extract_target_spectrum(target_profile)
-        if len(target_wv) < 5:
-            raise ValueError(f"Target '{target_name}': Insufficient valid spectral channels ({len(target_wv)} < 5).")
+        # Step 4: Ensure sufficient spectral resolution (minimum 5 channels)
+        wavelengths, _ = self._extract_spectrum(target)
+        if len(wavelengths) < 5:
+            raise ValueError(f"Target '{name}': Insufficient valid spectral channels ({len(wavelengths)} < 5).")
 
         return True
 
     @staticmethod
     def reflectance_to_ssa(r: np.ndarray) -> np.ndarray:
-        """Converts isotropic reflectance R to Single Scattering Albedo (SSA) w using Hapke theory."""
+        """
+        Converts isotropic reflectance (R) to Single Scattering Albedo (w) using Hapke theory:
+        w = 4 * R / (1 + R)^2
+        """
         r_clipped = np.clip(r, 1e-4, 0.999)
         return 4.0 * r_clipped / ((1.0 + r_clipped) ** 2)
 
     @staticmethod
     def ssa_to_reflectance(w: np.ndarray) -> np.ndarray:
-        """Converts Single Scattering Albedo (SSA) w to isotropic reflectance R."""
+        """
+        Converts Single Scattering Albedo (w) to isotropic reflectance (R) using Hapke theory:
+        gamma = sqrt(1 - w)
+        R = (1 - gamma) / (1 + gamma)
+        """
         w_clipped = np.clip(w, 1e-6, 0.9999)
         gamma = np.sqrt(1.0 - w_clipped)
         return (1.0 - gamma) / (1.0 + gamma)
 
-    def _select_library(self, target_profile: pd.Series) -> Tuple[pd.DataFrame, np.ndarray, np.ndarray]:
-        """Selects appropriate endmember library based on taxonomy and albedo."""
-        taxonomy = str(self.extract_field(target_profile, ["Taxonomic_Type", "taxonomy", "tax_type"], "")).upper().strip()
-        albedo = float(self.extract_field(target_profile, ["Albedo", "pV", "pv", "p_v"], 0.15))
+    def _select_library(self, target: pd.Series) -> Tuple[pd.DataFrame, np.ndarray, np.ndarray]:
+        """Selects stony vs primitive spectral endmember library based on taxonomy and albedo."""
+        taxonomy = str(self.extract_field(target, ["Taxonomic_Type", "taxonomy", "tax_type"], "")).upper().strip()
+        albedo = float(self.extract_field(target, ["Albedo", "pV", "pv", "p_v"], 0.15))
 
-        primitive_types = {"C", "B", "G", "F", "D", "P", "T", "D/P", "C/CB", "CB"}
-        if taxonomy in primitive_types or albedo < 0.08:
+        primitive_types = ("C", "B", "G", "F", "D", "P", "T")
+        is_primitive = any(taxonomy.startswith(p) for p in primitive_types)
+
+        # Select primitive library for carbonaceous/primitive classes without high-albedo overrides
+        if (is_primitive or albedo < 0.08) and not taxonomy.startswith("E") and not taxonomy.startswith("M"):
             if self.primitive_lib is not None:
-                return self.primitive_lib, self.primitive_ssa_raw, self.primitive_wvs
-            return self.stony_lib, self.stony_ssa_raw, self.stony_wvs
+                return self.primitive_lib, self.primitive_ssa, self.primitive_wvs
+            return self.stony_lib, self.stony_ssa, self.stony_wvs
 
         if self.stony_lib is not None:
-            return self.stony_lib, self.stony_ssa_raw, self.stony_wvs
-        return self.primitive_lib, self.primitive_ssa_raw, self.primitive_wvs
+            return self.stony_lib, self.stony_ssa, self.stony_wvs
+        return self.primitive_lib, self.primitive_ssa, self.primitive_wvs
 
-    def _extract_target_spectrum(self, target_profile: pd.Series) -> Tuple[np.ndarray, np.ndarray]:
-        """Extracts and cleans sorted arrays of wavelengths and reflectance values."""
-        wv_cols = [c for c in target_profile.index if str(c).lower().startswith("wv_")]
+    def _extract_spectrum(self, target: pd.Series) -> Tuple[np.ndarray, np.ndarray]:
+        """Extracts valid sorted wavelength and reflectance arrays from a target row."""
+        wv_cols = [col for col in target.index if str(col).lower().startswith("wv_")]
         wavelengths, reflectances = [], []
 
         for col in wv_cols:
             try:
                 wv = float(str(col).lower().replace("wv_", ""))
-                refl = float(target_profile[col])
+                refl = float(target[col])
                 if not np.isnan(refl) and not np.isinf(refl) and refl > 0.001:
                     wavelengths.append(wv)
                     reflectances.append(refl)
             except (ValueError, TypeError):
                 continue
 
-        order = np.argsort(wavelengths)
-        return np.array(wavelengths)[order], np.array(reflectances)[order]
+        sort_order = np.argsort(wavelengths)
+        return np.array(wavelengths)[sort_order], np.array(reflectances)[sort_order]
 
-    def _solve_optimization(
+    def _optimize_unmixing(
         self,
         target_wv: np.ndarray,
         target_refl: np.ndarray,
-        lib_ssa_matrix: np.ndarray,
+        lib_ssa: np.ndarray,
         albedo: float,
-        phase_angle_deg: float,
-        n_minerals: int
+        phase_angle: float,
+        n_minerals: int,
+        initial_guess: Optional[np.ndarray] = None,
     ) -> Tuple[np.ndarray, float, float, float]:
-        """Internal optimization solver for unmixing fractions and continuum modifiers."""
-        idx_vband = np.argmin(np.abs(target_wv - 0.55))
-        
-        refl_vband = target_refl[idx_vband]
-        phi_obs = (refl_vband / albedo) if albedo > 0 else 1.0
+        """
+        Executes SLSQP constrained optimization to determine mineral volume fractions,
+        spectral scale factor, and space weathering continuum slope offset.
+        """
+        # Find index corresponding to V-band wavelength (~0.55 um)
+        v_band_idx = np.argmin(np.abs(target_wv - 0.55))
 
-        def objective_function(params: np.ndarray) -> float:
+        # Phase function correction approximation
+        phase_rad = np.radians(phase_angle)
+        phase_factor = max(0.1, np.cos(phase_rad / 2.0) ** 2) if phase_angle > 0 else 1.0
+
+        def loss_function(params: np.ndarray) -> float:
             fractions = params[:n_minerals]
-            s_weathering = params[n_minerals]
+            weathering = params[n_minerals]
             scale = params[n_minerals + 1]
 
-            mix_ssa = np.dot(fractions, lib_ssa_matrix)
+            # Enforce unit sum normalization on mineral fractions
+            sum_f = np.sum(fractions)
+            norm_fractions = fractions / sum_f if sum_f > 0 else np.ones(n_minerals) / n_minerals
+
+            # Compute linear mix in SSA space and convert back to reflectance
+            mix_ssa = np.dot(norm_fractions, lib_ssa)
             mix_refl = self.ssa_to_reflectance(mix_ssa)
 
-            reddening = np.exp(s_weathering * (target_wv - 0.55))
-            model_refl = scale * mix_refl * reddening * phi_obs
+            # Apply exponential continuum reddening modifier
+            reddening = np.exp(weathering * (target_wv - 0.55))
+            model_refl = scale * mix_refl * reddening * phase_factor
 
-            spec_mse = np.mean((target_refl - model_refl) ** 2)
+            # Mean squared spectral error
+            mse = np.mean((target_refl - model_refl) ** 2)
 
+            # Penalty term for deviation from observed V-band albedo
             albedo_penalty = 0.0
             if albedo > 0:
-                p_V_model = scale * mix_refl[idx_vband]
-                albedo_penalty = 10.0 * ((p_V_model - albedo) / albedo) ** 2
+                v_model_albedo = scale * mix_refl[v_band_idx]
+                albedo_penalty = 10.0 * ((v_model_albedo - albedo) / albedo) ** 2
 
+            # Penalty terms for extreme scaling behavior
             scale_penalty = 0.0
-            if scale < 0.2:
-                scale_penalty = 100.0 * (0.2 - scale) ** 2
-            elif scale > 1.5:
-                scale_penalty = 100.0 * (scale - 1.5) ** 2
+            if scale < 0.1:
+                scale_penalty = 100.0 * (0.1 - scale) ** 2
+            elif scale > 3.0:
+                scale_penalty = 100.0 * (scale - 3.0) ** 2
 
-            ridge_reg = 1e-4 * np.sum(fractions ** 2)
+            # L2 Ridge regularization on fractional concentration vector
+            ridge_reg = 1e-4 * np.sum(norm_fractions ** 2)
 
-            return spec_mse + albedo_penalty + scale_penalty + ridge_reg
+            return mse + albedo_penalty + scale_penalty + ridge_reg
 
+        # Constraint: sum of mineral volume fractions must equal 1.0
         constraints = ({"type": "eq", "fun": lambda p: np.sum(p[:n_minerals]) - 1.0},)
-        bounds = [(0.0, 1.0)] * n_minerals + [(0.0, 1.0), (0.2, 1.5)]
+        bounds = [(0.0, 1.0)] * n_minerals + [(-0.5, 1.0), (0.1, 3.0)]
 
-        x0_uniform = np.ones(n_minerals) / n_minerals
-        params0 = np.append(x0_uniform, [0.05, 0.80])
+        if initial_guess is not None and len(initial_guess) == n_minerals + 2:
+            params0 = initial_guess
+        else:
+            uniform_fractions = np.ones(n_minerals) / n_minerals
+            params0 = np.append(uniform_fractions, [0.05, max(0.80, albedo * 3.0)])
 
-        res = minimize(
-            objective_function,
+        result = minimize(
+            loss_function,
             params0,
             method="SLSQP",
             bounds=bounds,
             constraints=constraints,
-            options={"maxiter": 500, "ftol": 1e-8},
+            options={"maxiter": 500, "ftol": 1e-9},
         )
 
-        best_fractions = np.maximum(0, res.x[:n_minerals])
-        best_fractions /= np.sum(best_fractions)
-        s_opt = res.x[n_minerals]
-        k_opt = res.x[n_minerals + 1]
+        # Non-negativity clipping and re-normalization
+        best_fractions = np.maximum(0, result.x[:n_minerals])
+        sum_f = np.sum(best_fractions)
+        best_fractions = best_fractions / sum_f if sum_f > 0 else np.ones(n_minerals) / n_minerals
 
-        return best_fractions, s_opt, k_opt, res.fun
+        s_opt = float(result.x[n_minerals])
+        k_opt = float(result.x[n_minerals + 1])
 
-    def invert_single_target(self, target_profile: pd.Series) -> Dict[str, Any]:
-        """Inverts a single target spectrum and performs Monte Carlo error propagation."""
-        target_name = self.extract_field(target_profile, ["Asteroid_Name", "name", "designation"], "Unknown")
-        taxonomy = self.extract_field(target_profile, ["Taxonomic_Type", "taxonomy", "tax_type"], "Unknown")
-        bulk_density = float(self.extract_field(target_profile, ["Bulk_Density_gcm3", "bulk_density", "density"], 2.5))
-        bulk_density_err = float(self.extract_field(target_profile, ["Bulk_Density_Uncertainty", "bulk_density_uncertainty", "density_err"], 0.1))
-        albedo = float(self.extract_field(target_profile, ["Albedo", "pV", "pv", "p_v"], 0.15))
-        phase_angle = float(self.extract_field(target_profile, ["Phase_Angle_deg", "phase_angle", "phase"], 0.0))
+        return best_fractions, s_opt, k_opt, float(result.fun)
 
-        if self.verbose_logging:
+    def invert_single_target(self, target: pd.Series) -> Dict[str, Any]:
+        """
+        Inverts spectral properties for a single body, deriving physical bulk density,
+        macroporosity, core parameters, and performing Monte Carlo error analysis.
+        """
+        name = self.extract_field(target, ["Asteroid_Name", "name", "designation"], "Unknown")
+        taxonomy = str(self.extract_field(target, ["Taxonomic_Type", "taxonomy", "tax_type"], "Unknown"))
+        bulk_density = float(self.extract_field(target, ["Bulk_Density_gcm3", "bulk_density", "density"], 2.5))
+        bulk_density_err = float(self.extract_field(target, ["Bulk_Density_Uncertainty", "bulk_density_uncertainty", "density_err"], 0.1))
+        albedo = float(self.extract_field(target, ["Albedo", "pV", "pv", "p_v"], 0.15))
+        phase_angle = float(self.extract_field(target, ["Phase_Angle_deg", "phase_angle", "phase"], 0.0))
+
+        if self.verbose:
             self.logger.info("-" * 60)
-            self.logger.info(f"STARTING INVERSION: Target={target_name} | Taxonomy={taxonomy} | pV={albedo}")
+            self.logger.info(f"STARTING INVERSION: Target={name} | Taxonomy={taxonomy} | pV={albedo:.3f}")
 
-        lib_df, lib_ssa_raw, lib_wvs = self._select_library(target_profile)
+        lib_df, lib_ssa_raw, lib_wvs = self._select_library(target)
         if lib_df is None or lib_ssa_raw is None:
-            raise ValueError(f"Target '{target_name}': Spectral endmember library unavailable.")
+            raise ValueError(f"Target '{name}': Spectral endmember library unavailable.")
 
-        target_wv, target_refl = self._extract_target_spectrum(target_profile)
+        target_wv, target_refl = self._extract_spectrum(target)
         n_minerals = len(lib_df)
         densities = lib_df["Density_gcm3"].values.astype(float)
         mineral_names = lib_df["Mineral_Name"].values
 
-        lib_ssa_matrix = np.zeros((n_minerals, len(target_wv)))
+        # Interpolate endmember SSA spectra onto target wavelength channels
+        lib_ssa = np.zeros((n_minerals, len(target_wv)))
         for i in range(n_minerals):
-            lib_ssa_matrix[i, :] = np.interp(target_wv, lib_wvs, lib_ssa_raw[i, :], left=lib_ssa_raw[i, 0], right=lib_ssa_raw[i, -1])
+            lib_ssa[i, :] = np.interp(target_wv, lib_wvs, lib_ssa_raw[i, :], left=lib_ssa_raw[i, 0], right=lib_ssa_raw[i, -1])
 
-        best_fractions, s_opt, k_opt, loss_val = self._solve_optimization(
-            target_wv, target_refl, lib_ssa_matrix, albedo, phase_angle, n_minerals
+        # Optimize spectral unmixing
+        best_fractions, s_opt, k_opt, loss_val = self._optimize_unmixing(
+            target_wv, target_refl, lib_ssa, albedo, phase_angle, n_minerals
         )
 
+        # Derive grain density of crustal material
         crust_grain_density = float(np.sum(best_fractions * densities))
 
-        mix_ssa = np.dot(best_fractions, lib_ssa_matrix)
+        # Reconstruct best-fit model spectrum
+        mix_ssa = np.dot(best_fractions, lib_ssa)
         mix_refl = self.ssa_to_reflectance(mix_ssa)
-        idx_vband = np.argmin(np.abs(target_wv - 0.55))
-        phi_obs = (target_refl[idx_vband] / albedo) if albedo > 0 else 1.0
-        model_refl = k_opt * mix_refl * np.exp(s_opt * (target_wv - 0.55)) * phi_obs
+        phase_rad = np.radians(phase_angle)
+        phase_factor = max(0.1, np.cos(phase_rad / 2.0) ** 2) if phase_angle > 0 else 1.0
+        model_refl = k_opt * mix_refl * np.exp(s_opt * (target_wv - 0.55)) * phase_factor
 
+        # Goodness-of-fit metrics
         residuals = target_refl - model_refl
-        dof = max(1, len(target_wv) - (np.sum(best_fractions > 0.001) + 2))
+        k_active = int(np.sum(best_fractions > 0.001)) + 2
+        dof = max(1, len(target_wv) - k_active)
         sse = float(np.sum(residuals ** 2))
         rmse = float(np.sqrt(sse / dof))
 
-        # Monte Carlo Uncertainty Propagation (N_MC = 50)
-        n_mc = 50
-        mc_grain_densities, mc_macroporosities, mc_core_mass_fracs = [], [], []
+        # Monte Carlo error propagation loop
+        rng = np.random.default_rng(seed=42)
+        mc_grain_densities, mc_density_diffs = [], []
+        mc_macroporosities, mc_core_mass_fracs = [], []
 
-        is_primitive = taxonomy in {"C", "B", "G", "F", "D", "P", "T"} or albedo < 0.08
+        is_primitive = any(taxonomy.upper().startswith(p) for p in ("C", "B", "G", "F", "D", "P", "T")) or albedo < 0.08
         eta_micro = 0.25 if is_primitive else 0.10
-        core_density = 7.87
+        core_density = self.IRON_CORE_DENSITY
+        noise_std = max(0.002, min(0.010, rmse * 0.2))
 
-        for mc_seed in range(n_mc):
-            np.random.seed(mc_seed)
-            perturbed_refl = target_refl + np.random.normal(0, max(0.005, rmse), size=len(target_refl))
-            perturbed_bulk = max(0.1, np.random.normal(bulk_density, bulk_density_err))
+        opt_params0 = np.append(best_fractions, [s_opt, k_opt])
 
-            p_fracs, _, _, _ = self._solve_optimization(
-                target_wv, perturbed_refl, lib_ssa_matrix, albedo, phase_angle, n_minerals
+        for _ in range(self.n_mc):
+            perturbed_refl = np.maximum(1e-4, target_refl + rng.normal(0, noise_std, size=len(target_refl)))
+            perturbed_bulk = max(0.1, rng.normal(bulk_density, bulk_density_err))
+            v_idx = np.argmin(np.abs(target_wv - 0.55))
+            perturbed_albedo = max(0.01, albedo * (perturbed_refl[v_idx] / max(1e-4, target_refl[v_idx])))
+
+            p_fracs, _, _, _ = self._optimize_unmixing(
+                target_wv, perturbed_refl, lib_ssa, perturbed_albedo, phase_angle, n_minerals, initial_guess=opt_params0
             )
             p_grain = float(np.sum(p_fracs * densities))
             mc_grain_densities.append(p_grain)
+            mc_density_diffs.append(p_grain - perturbed_bulk)
 
             if perturbed_bulk <= p_grain:
                 p_macro = max(0.0, 1.0 - (perturbed_bulk / (p_grain * (1.0 - eta_micro))))
                 p_core = 0.0
             else:
                 p_macro = 0.0
-                v_c = min(1.0, max(0.0, (perturbed_bulk - p_grain) / (core_density - p_grain)))
-                p_core = min(1.0, max(0.0, v_c * (core_density / perturbed_bulk)))
+                if abs(core_density - p_grain) > 1e-4 and core_density > p_grain:
+                    v_c = min(1.0, max(0.0, (perturbed_bulk - p_grain) / (core_density - p_grain)))
+                    p_core = min(1.0, max(0.0, v_c * (core_density / perturbed_bulk)))
+                else:
+                    p_core = 0.0
 
             mc_macroporosities.append(p_macro)
             mc_core_mass_fracs.append(p_core)
 
+        # Aggregate parameter statistics and uncertainties
         crust_grain_err = float(np.std(mc_grain_densities))
         density_diff = float(crust_grain_density - bulk_density)
-        density_diff_err = float(np.sqrt(crust_grain_err ** 2 + bulk_density_err ** 2))
+        density_diff_err = float(np.std(mc_density_diffs))
 
         total_porosity = max(0.0, 1.0 - (bulk_density / crust_grain_density)) if bulk_density <= crust_grain_density else 0.0
-        
+
         if bulk_density <= crust_grain_density:
             macroporosity = max(0.0, 1.0 - (bulk_density / (crust_grain_density * (1.0 - eta_micro))))
-            porosity_err = float(np.std(mc_macroporosities))
             core_vol_frac = 0.0
             core_mass_frac = 0.0
-            core_mass_err = 0.0
         else:
             macroporosity = 0.0
-            porosity_err = 0.0
-            core_vol_frac = min(1.0, max(0.0, (bulk_density - crust_grain_density) / (core_density - crust_grain_density)))
-            core_mass_frac = min(1.0, max(0.0, core_vol_frac * (core_density / bulk_density)))
-            core_mass_err = float(np.std(mc_core_mass_fracs))
+            if abs(core_density - crust_grain_density) > 1e-4 and core_density > crust_grain_density:
+                core_vol_frac = min(1.0, max(0.0, (bulk_density - crust_grain_density) / (core_density - crust_grain_density)))
+                core_mass_frac = min(1.0, max(0.0, core_vol_frac * (core_density / bulk_density)))
+            else:
+                core_vol_frac = 0.0
+                core_mass_frac = 0.0
 
+        porosity_err = float(np.std(mc_macroporosities))
+        core_mass_err = float(np.std(mc_core_mass_fracs))
+
+        # Information-theoretic criteria calculation
         n_obs = len(target_wv)
-        k_active = int(np.sum(best_fractions > 0.001)) + 2
         chi2_r = float(sse / (dof * (0.01 ** 2)))
         aic = float(n_obs * np.log(max(1e-10, sse / n_obs)) + 2 * k_active)
-        
-        aicc_denom = n_obs - k_active - 1
-        aicc = float(aic + (2 * k_active * (k_active + 1)) / aicc_denom) if aicc_denom > 0 else aic
+        denom = n_obs - k_active - 1
+        aicc = float(aic + (2 * k_active * (k_active + 1)) / denom) if denom > 0 else float(aic)
         bic = float(n_obs * np.log(max(1e-10, sse / n_obs)) + k_active * np.log(n_obs))
 
-        if self.verbose_logging:
+        if self.verbose:
             self.logger.info(
-                f"OPTIMIZATION CONVERGED: Target={target_name} | Best Loss={loss_val:.6f} | "
+                f"OPTIMIZATION CONVERGED: Target={name} | Best Loss={loss_val:.6f} | "
                 f"Scale={k_opt:.4f} | Space Weathering={s_opt:.4f}"
             )
             self.logger.info("INVERTED MINERAL COMPOSITION BREAKDOWN:")
-            for m_idx in range(n_minerals):
-                if best_fractions[m_idx] > 0.001:
-                    self.logger.info(f"  - {mineral_names[m_idx]:<35} : {best_fractions[m_idx]*100.0:6.2f}%")
+            for m in range(n_minerals):
+                if best_fractions[m] > 0.001:
+                    self.logger.info(f"  - {mineral_names[m]:<35} : {best_fractions[m]*100.0:6.2f}%")
             self.logger.info("GEOPHYSICAL & STATISTICAL PARAMETERS:")
             self.logger.info(f"  - Crustal Grain Density : {crust_grain_density:.3f} +/- {crust_grain_err:.3f} g/cm3")
             self.logger.info(f"  - Density Differential  : {density_diff:.3f} +/- {density_diff_err:.3f} g/cm3")
@@ -362,40 +552,40 @@ class SpectroscopicBulkInversion:
             "BIC": bic,
         }
 
-    def process_batch(self, targets_csv_path: str) -> pd.DataFrame:
-        """Processes an input batch CSV of spectrophotometric targets."""
-        if not os.path.exists(targets_csv_path):
-            if self.verbose_logging:
-                self.logger.error(f"Batch target file not found: {targets_csv_path}")
+    def process_batch(self, csv_path: str) -> pd.DataFrame:
+        """Processes a batch CSV dataset of target spectra and outputs inverted results."""
+        if not os.path.exists(csv_path):
+            if self.verbose:
+                self.logger.error(f"Batch target file not found: {csv_path}")
             return pd.DataFrame()
 
-        df_targets = pd.read_csv(targets_csv_path)
-        records_list = df_targets.to_dict("records")
-        inversion_records = []
+        df_targets = pd.read_csv(csv_path)
+        records = df_targets.to_dict("records")
+        results = []
 
-        if self.verbose_logging:
-            self.logger.info(f"PROCESSING BATCH FILE: {targets_csv_path} ({len(records_list)} targets)")
+        if self.verbose:
+            self.logger.info(f"PROCESSING BATCH FILE: {csv_path} ({len(records)} targets)")
 
-        for target_dict in records_list:
-            target_profile = pd.Series(target_dict)
-            target_name = self.extract_field(target_profile, ["Asteroid_Name", "name", "designation"], "Unknown")
-            taxonomy = self.extract_field(target_profile, ["Taxonomic_Type", "taxonomy", "tax_type"], "Unknown")
+        for record in records:
+            target = pd.Series(record)
+            name = self.extract_field(target, ["Asteroid_Name", "name", "designation"], "Unknown")
+            taxonomy = self.extract_field(target, ["Taxonomic_Type", "taxonomy", "tax_type"], "Unknown")
 
-            output_entry = {
-                "Asteroid_Name": target_name,
+            entry = {
+                "Asteroid_Name": name,
                 "Taxonomic_Type": taxonomy,
                 "Status": "VALIDATION PASS",
                 "Exclusion_Reason": "",
             }
 
             try:
-                if self.assert_boundary_constraints(target_profile):
-                    output_entry.update(self.invert_single_target(target_profile))
-            except Exception as execution_exception:
-                output_entry.update(
+                if self.validate_target_constraints(target):
+                    entry.update(self.invert_single_target(target))
+            except Exception as exc:
+                entry.update(
                     {
-                        "Status": "EXCLUDED" if isinstance(execution_exception, ValueError) else "FAILED",
-                        "Exclusion_Reason": str(execution_exception),
+                        "Status": "EXCLUDED" if isinstance(exc, ValueError) else "FAILED",
+                        "Exclusion_Reason": str(exc),
                         "Crustal_Grain_Density": 0.0,
                         "Crustal_Grain_Error": 0.0,
                         "Density_Differential": 0.0,
@@ -414,9 +604,9 @@ class SpectroscopicBulkInversion:
                     }
                 )
 
-            inversion_records.append(output_entry)
+            results.append(entry)
 
-        if self.verbose_logging:
+        if self.verbose:
             self.logger.info("BATCH INVERSION COMPLETED SUCCESSFULLY.")
 
-        return pd.DataFrame(inversion_records)
+        return pd.DataFrame(results)
