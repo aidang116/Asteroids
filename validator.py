@@ -1,8 +1,10 @@
 """
-Validation Engine for the Spectroscopic Bulk Inversion Framework.
+Validation Engine for the Spectroscopic Bulk Inversion Framework (200-Channel Version).
 
-Runs pipeline validation on targets in validation_targets.csv and checks 
-inverted grain densities and porosities against published benchmark ranges.
+Runs batch spectroscopic inversion on validation_targets_200ch.csv and verifies 
+derived physical parameters against peer-reviewed benchmark confidence bounds.
+
+File: validator.py
 """
 
 import os
@@ -12,9 +14,8 @@ from analyzer import SpectroscopicBulkInversion
 
 
 def validate_pipeline() -> None:
-    """Runs batch spectroscopic inversion and evaluates derived physical parameters."""
-    targets_file = "validation_targets.csv"
-    results_file = "validation_results.csv"
+    targets_file = "validation_targets_200ch.csv"
+    results_file = "validation_results_200ch.csv"
 
     if not os.path.exists(targets_file):
         print(f"CRITICAL ERROR: Validation target file '{targets_file}' missing.")
@@ -22,12 +23,14 @@ def validate_pipeline() -> None:
 
     start_time = time.time()
     
-    # Initialize unmixing inversion model with 200 Monte Carlo runs
-    model = SpectroscopicBulkInversion(n_mc=200)
+    model = SpectroscopicBulkInversion(
+        stony_lib_path="stony_metallic_library_200ch.csv",
+        primitive_lib_path="primitive_aqueous_library_200ch.csv",
+        n_mc=200,
+    )
     results_df = model.process_batch(targets_file)
     elapsed_time = time.time() - start_time
 
-    # Merge inverted parameters back with target benchmark bounds
     raw_benchmarks = pd.read_csv(targets_file)
     benchmark_cols = [
         "Asteroid_Name",
@@ -44,7 +47,7 @@ def validate_pipeline() -> None:
     total_targets = len(merged_df)
 
     print("\n" + "=" * 80)
-    print("      HIGH-PERFORMANCE SPECTROSCOPIC BULK INVERSION VALIDATION SUITE       ")
+    print("      200-CHANNEL SPECTROSCOPIC BULK INVERSION VALIDATION SUITE       ")
     print("=" * 80)
     print(f" Execution Wall-Clock Time : {elapsed_time:.3f} seconds for {total_targets} targets")
     print("-" * 80)
@@ -71,7 +74,6 @@ def validate_pipeline() -> None:
             excluded_count += 1
             continue
 
-        # Check if derived parameters lie within published confidence bounds
         grain_valid = (exp_grain_min <= grain_density <= exp_grain_max) or (
             abs(grain_density - (exp_grain_min + exp_grain_max) / 2) <= max(0.40, 1.96 * grain_err)
         )
@@ -90,14 +92,14 @@ def validate_pipeline() -> None:
         )
 
         if grain_valid and porosity_valid and uncertainty_valid:
-            print("  [DIAGNOSTIC VERDICT] PASS: Unconstrained spectral inversion within expected statistical bounds.")
+            print("  [DIAGNOSTIC VERDICT] PASS: Unconstrained 200-channel inversion within expected statistical bounds.")
             passed_count += 1
         else:
             print("  [DIAGNOSTIC VERDICT] FAIL: Divergence detected relative to diagnostic expectations.")
 
     evaluated_count = total_targets - excluded_count
     success_rate = (passed_count / max(1, evaluated_count)) * 100.0
-    
+
     print("\n" + "=" * 80)
     print(
         f"FINAL VALIDATION RESULT: {passed_count}/{evaluated_count} Inverted Targets Passed "
